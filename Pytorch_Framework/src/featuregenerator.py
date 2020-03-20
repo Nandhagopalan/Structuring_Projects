@@ -24,8 +24,6 @@ class Featureengineering():
         self.df['day_sin'] = np.sin((self.df[self.cyclical_feats[1]] - 1) * (2.0 * np.pi / 7))
         self.df['day_cos'] = np.cos((self.df[self.cyclical_feats[1]] - 1) * (2.0 * np.pi / 7))
 
-        #self.df.drop(self.cyclical_feats,axis=1,inplace=True)
-
         self.cyclical_feats=['month_sin','month_cos','day_sin','day_cos']
 
 

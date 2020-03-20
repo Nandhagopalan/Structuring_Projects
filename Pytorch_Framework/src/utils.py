@@ -4,22 +4,12 @@ import torch
 from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data import Dataset, DataLoader
 
-def get_cat_cont_idx(df,contfeats):
+def get_cat_cont_feats(df,contfeats):
     
     categorical = df.drop(['target'] + contfeats,
                           axis=1).columns
-    
-    cat_cols_idx, cont_cols_idx = list(), list()
-    df=df.drop(['target'],axis=1)
 
-    for idx, column in enumerate(df.columns):
-
-        if column in categorical:
-            cat_cols_idx.append(idx)
-        elif column in contfeats:
-            cont_cols_idx.append(idx)
-
-    return cat_cols_idx,cont_cols_idx
+    return categorical,contfeats
 
 
 def set_seed(seed):
@@ -54,16 +44,11 @@ def split_dataset(trainset, valid_size=0.2, batch_size=64):
     return train_loader, valid_loader
 
 
-def cat_dim(all_df,cont_feats):
+def cat_dim(all_df,cats):
     
-    categorical = all_df.drop(['target'] + cont_feats,
-                          axis=1).columns
+    embedding_cardinality = {n: c.nunique()+1 for n,c in all_df[cats].items()}
+    emb_sizes = [(size, max(5, size//2)) for item, size in embedding_cardinality.items()]
 
-    cat_dim = [int(all_df[col].nunique()) for col in categorical]
-    cat_dim = [[x, min(200, (x + 1) // 2)] for x in cat_dim]
+    return emb_sizes
 
-    for el in cat_dim:
-        if el[0] < 10:
-            el[1] = el[0]
-
-    return cat_dim
+    

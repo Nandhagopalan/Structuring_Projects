@@ -14,6 +14,7 @@ class ClassificationEmbdNN(torch.nn.Module):
         self.emb_dropout = torch.nn.Dropout(0.2)
         
         self.no_of_cont = 0
+        
         if no_of_cont:
             self.no_of_cont = no_of_cont
             self.bn_cont = torch.nn.BatchNorm1d(no_of_cont)
@@ -41,20 +42,17 @@ class ClassificationEmbdNN(torch.nn.Module):
         self.act4 = torch.nn.Sigmoid()
         
     def forward(self, x_cat, x_cont=None):
-        if self.no_of_embs != 0:
-            x = [emb_layer(x_cat[:, i]) for i, emb_layer in enumerate(self.emb_layers)]
-        
-            x = torch.cat(x, 1)
-            x = self.emb_dropout(x)
+    
+        x = [emb_layer(x_cat[:, i]) for i, emb_layer in enumerate(self.emb_layers)]
+    
+        x = torch.cat(x, 1)
+        x = self.emb_dropout(x)
             
-        if self.no_of_cont != 0:
-            x_cont = self.bn_cont(x_cont)
-            
-            if self.no_of_embs != 0:
-                x = torch.cat([x, x_cont], 1)
-            else:
-                x = x_cont
+    
+        x_cont = self.bn_cont(x_cont)
         
+        x = torch.cat([x, x_cont], 1)
+    
         x = self.fc1(x)
         x = self.dropout1(x)
         x = self.bn1(x)

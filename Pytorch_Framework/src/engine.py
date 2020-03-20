@@ -31,16 +31,16 @@ def train_network(model, train_loader, valid_loader,
                            batch['data'][1].to(device, 
                                                dtype=torch.float))
             
-            loss = loss_func(output, batch['target'].to(device, 
-                                                        dtype=torch.float))
-            
+
+            loss = loss_func(output, batch['target'].to(device,dtype=torch.float))
+
             loss.backward()
             optimizer.step()
             
             train_auc += metrics.roc_auc_score(batch['target'].cpu().numpy(),
                                                output.detach().cpu().numpy())
 
-            train_loss += loss.item() * batch['data'][0].size(0)  #!!!
+            train_loss += loss.item() * batch['data'][0].size(0) 
     
 
         model.eval()
@@ -51,9 +51,8 @@ def train_network(model, train_loader, valid_loader,
                            batch['data'][1].to(device, 
                                                dtype=torch.float))
             
-            
-            loss = loss_func(output, batch['target'].to(device, 
-                                                        dtype=torch.float))
+           
+            loss = loss_func(output, batch['target'].to(device,dtype=torch.float))
             
             valid_auc += metrics.roc_auc_score(batch['target'].cpu().numpy(),
                                                output.detach().cpu().numpy())

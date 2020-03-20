@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
+from tqdm import tqdm
 
 def predict(data_loader, model):
     model.eval()
@@ -31,9 +32,9 @@ def predict(data_loader, model):
 def predict_pipe(model,test_dataset):
 
     #Testing
-    model.load_state_dict(torch.load('simple_nn.pt'))
+    model.load_state_dict(torch.load('../output/simple_nn.pt'))
 
     test_loader = DataLoader(test_dataset, 
                          batch_size=128)
 
-    predictions = predict(test_loader, model) 
+    return predict(test_loader, model) 
