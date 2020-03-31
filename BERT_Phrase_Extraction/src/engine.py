@@ -42,8 +42,6 @@ def train_fn(data_loader,model,optimizer,device,scheduler):
         optimizer.step()
         scheduler.step()
 
-        losses.update(loss.item(),ids,size(0))
-        tk0.postfix(loss=losses.avg)
 
 def eval_fn(data_loader,model,device):
     model.eval()

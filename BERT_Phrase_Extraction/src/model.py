@@ -19,7 +19,7 @@ class BERTBaseUncased(nn.Module):
         #seq_out -> batch,tokens,hiddensize
         #pooled -> batch,hiddensize
         
-        logits = self.lo(bo)
+        logits = self.lo(seq_out)
         #(batch,tokens,2)
 
         start_logits,end_logits=logits.split(1,dim=-1)
